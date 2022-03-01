@@ -1,4 +1,5 @@
 import random
+from turtle import pos
 
 # This knights tour algorithm for 3
 # dimensions follows Warnsdorff's Rule:
@@ -59,10 +60,10 @@ class KnightsTour():
         self.__length = size
         self.__width = size
         self.__height = size
-        self.__round = 0
         self.__position = []
         self.__visited = []
         self.__availableMoves = []
+        self.__permutations = self.__permutation([1, 2, 3])
 
     def initialize(self):
         print("Initializing..")
@@ -70,6 +71,7 @@ class KnightsTour():
         self.__position = [random.randint(0, self.__length-1),
             random.randint(0, self.__length-1),
             random.randint(0, self.__length-1)]
+            
         # initialize visited matrix and set starting position to true
         self.__visited = [[[False for i in range(self.__length)]
             for i in range(self.__length)]
@@ -91,12 +93,18 @@ class KnightsTour():
     def __beenVisited(self, position):
         self.__visited[position[0]][position[1]][position[2]] = True
 
+    def __hasBeenVisited(self, position):
+        return self.__visited[position[0]][position[1]][position[2]]
+
+    def __getAvailableMoves(self, position):
+        return self.__availableMoves[position[0]][position[1]][position[2]]
+
     def __initializeAvailableMoves(self):
         for i in range(self.__length):
             for j in range(self.__width):
                 for k in range(self.__height): # for each cell in the board
                     position = [i, j, k]
-                    for move in self.__permutation([1, 2, 3]):
+                    for move in self.__permutations:
                         if self.__isOutside(position, move):
                             self.__availableMoves[i][j][k] -= 1
 
@@ -146,6 +154,37 @@ class KnightsTour():
                 l.append([m] + p)
                 l.append([-1*m] + p)
         return l
+
+    def __finished(self):
+        for i in range(self.__height):
+            for j in range(self.__height):
+                for k in range(self.__height):
+                    if not self.__visited[i][j][k]:
+                        return False
+        return True
+
+
+    def takeStep(self): # TODO algorithm is having knight bounce back and forth between two spaces
+        # case that we've finished already
+        if self.__finished():
+            print("algorithm already completed")
+            return None
+
+        minMove = None # stores the position to move to
+        for move in self.__permutations: # for every possible move
+            if not self.__isOutside(self.__position, move): # as long as that new pos isn't outside
+                newPos = [self.__position[0] + move[0], self.__position[1] + move[1], self.__position[2] + move[2]]
+                if not self.__hasBeenVisited(newPos): # as long as we haven't visited that cell before
+                    if minMove == None or self.__getAvailableMoves(newPos) < self.__getAvailableMoves(minMove):
+                        minMove = newPos
+                        
+        if minMove == None:
+            print("algorithm failed to find viable move spot")
+            return None
+        self.__position = minMove
+        self.__beenVisited(self.__position)
+        return self.__position
+
 
 
 if __name__ == "__main__":
