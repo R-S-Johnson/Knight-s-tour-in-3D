@@ -1,5 +1,7 @@
 import random
-from turtle import pos
+
+# TODO as of right now, this algorithm
+# fails to find a knights tour in 3D
 
 # This knights tour algorithm for 3
 # dimensions follows Warnsdorff's Rule:
@@ -65,13 +67,13 @@ class KnightsTour():
         self.__availableMoves = []
         self.__permutations = self.__permutation([1, 2, 3])
 
-    def initialize(self):
+    def initializeRandom(self):
         print("Initializing..")
         # set random starting position
         self.__position = [random.randint(0, self.__length-1),
             random.randint(0, self.__length-1),
             random.randint(0, self.__length-1)]
-            
+
         # initialize visited matrix and set starting position to true
         self.__visited = [[[False for i in range(self.__length)]
             for i in range(self.__length)]
@@ -87,6 +89,29 @@ class KnightsTour():
         print("Finished initializing")
 
         return self.__position
+    
+    # initialization for given starting position
+    def initialize(self, x, y, z):
+        print("Initializing..")
+        # set given starting position
+        self.__position = [x, y, z]
+
+        # initialize visited matrix and set starting position to true
+        self.__visited = [[[False for i in range(self.__length)]
+            for i in range(self.__length)]
+            for i in range(self.__length)]
+        self.__beenVisited(self.__position)
+
+        self.__availableMoves = [[[48 for i in range(self.__height)] 
+            for j in range(self.__height)]
+            for k in range(self.__height)]
+
+        self.__initializeAvailableMoves()
+
+        print("Finished initializing")
+
+        return self.__position
+
 
 
 

@@ -3,39 +3,27 @@ from Algorithm import KnightsTour
 
 
 
-n = 8
-runner = KnightsTour(n)
-x = []
-y = []
-z = []
-newPoint = runner.initialize()
-print(newPoint)
-x.append(newPoint[0])
-y.append(newPoint[1])
-z.append(newPoint[2])
 
-i = 0
-while (i < 10000 and len(x) < 512):
-    n = 8
-    runner = KnightsTour(n)
-    x = []
-    y = []
-    z = []
-    newPoint = runner.initialize()
-    print(newPoint)
-    x.append(newPoint[0])
-    y.append(newPoint[1])
-    z.append(newPoint[2])
+for i in range(8):
+    for j in range(8):
+        for k in range(8):
+            n = 8
+            runner = KnightsTour(n)
+            x = []
+            y = []
+            z = []
+            newPoint = runner.initialize(i, j, k)
+            x.append(newPoint[0])
+            y.append(newPoint[1])
+            z.append(newPoint[2])
 
-    for i in range(n**3):
-        newPoint = runner.takeStep()
-        if newPoint == None:
-            break
-        x.append(newPoint[0])
-        y.append(newPoint[1])
-        z.append(newPoint[2])
-    print(i)
-    i += 1
+            for n in range(n**3):
+                newPoint = runner.takeStep()
+                if newPoint == None:
+                    break
+                x.append(newPoint[0])
+                y.append(newPoint[1])
+                z.append(newPoint[2])
 
 
 if len(x) == 512:
